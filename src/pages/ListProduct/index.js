@@ -53,6 +53,70 @@ const categoryProduct = [{
 }];
 
 
+const listProduct = [
+    {
+        idProduct: 1,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    },
+    {
+        idProduct: 2,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    },
+    {
+        idProduct: 3,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    },
+    {
+        idProduct: 4,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    },
+    {
+        idProduct: 5,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    },
+    {
+        idProduct: 6,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    },
+    {
+        idProduct: 7,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    },
+    {
+        idProduct: 7,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    },
+    {
+        idProduct: 7,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    },
+    {
+        idProduct: 7,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    }
+
+]
+
 const ListProduct = ({ navigation, route }) => {
 
     const itemCategoryProduct = ({ item }) => (
@@ -62,6 +126,19 @@ const ListProduct = ({ navigation, route }) => {
     const backHome = () => {
         navigation.goBack();
     }
+
+    const ItemProduct = ({ item }) => (
+        <View style={styles.background}>
+            <Image source={{ url: 'https://cdn.concung.com/2022/06/57936-89792-large_mobile/sua-nutifood-varna-complete-850g.jpg' }} style={styles.ic_product} />
+            <Text numberOfLines={2} style={styles.nameProduct}>{item.nameProduct}</Text>
+            <Text style={styles.price}>{item.price}</Text>
+            <View style={styles.sale}>
+                <Text>30.000đ</Text>
+                <Text style={styles.borderSale}>20%</Text>
+            </View>
+        </View>
+
+    )
 
 
 
@@ -78,11 +155,19 @@ const ListProduct = ({ navigation, route }) => {
             </View>
             <View>
                 <FlatList
+                    style={styles.listCategory}
                     data={categoryProduct}
                     renderItem={itemCategoryProduct}
                     horizontal={true}
-                    showsHorizontalScrollIndicator={true}
-                />
+                    showsHorizontalScrollIndicator={true} />
+            </View>
+            <View>
+
+                <FlatList
+                    style={styles.listProduct}
+                    data={listProduct}
+                    numColumns={3}
+                    renderItem={ItemProduct} />
             </View>
         </View>
     )
