@@ -2,18 +2,20 @@ import { StyleSheet, Dimensions } from "react-native";
 import Color from "../../common/Color";
 const width = Dimensions.get('window').width
 
-const size = width/3
+const size = width / 3
+const size1 = width / 3.5
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         marginTop: 50,
     },
-    background: {
-        backgroundColor:Color.white,
+    itemProduct: {
+        backgroundColor: Color.white,
         width: size,
-        borderColor:Color.gray,
-       margin:1
-    
+        borderColor: Color.gray,
+        margin: 1,
+        paddingHorizontal: 5,
     },
     Search: {
         flexDirection: "row",
@@ -37,6 +39,11 @@ const styles = StyleSheet.create({
         marginRight: 15,
     },
 
+    addCart: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
     Back: {
         width: 30,
         height: 30,
@@ -46,22 +53,22 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     ic_product: {
-        width: size,
-        height: size,
+        width: size1,
+        height: size1,
+        marginTop: 10,
         resizeMode: 'stretch',
     },
 
     nameProduct: {
-     marginVertical:10
+        marginVertical: 10,
     },
     price: {
         fontSize: 18,
         fontWeight: 'bold',
-        textAlign: 'center'
     },
     sale: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        marginBottom: 10
     },
     borderSale: {
         marginLeft: 5,
@@ -71,8 +78,9 @@ const styles = StyleSheet.create({
         color: Color.red,
         paddingHorizontal: 5,
     },
-    listProduct:{
-       marginTop:10
+    listProduct: {
+        marginTop: 10,
+        marginBottom: 50,
     }
 })
 

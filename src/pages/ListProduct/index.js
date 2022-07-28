@@ -114,6 +114,13 @@ const listProduct = [
         image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
         price: "25.000đ"
     }
+    ,
+    {
+        idProduct: 7,
+        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
+        price: "25.000đ"
+    }
 
 ]
 
@@ -123,15 +130,25 @@ const ListProduct = ({ navigation, route }) => {
         <ItemCategoryProduct name={item.name} image={item.image} />
     )
 
+    const BarCount =({count})=>{
+        <View>
+            <Text>{count}</Text>
+        </View>
+    }
+
     const backHome = () => {
         navigation.goBack();
     }
 
     const ItemProduct = ({ item }) => (
-        <View style={styles.background}>
+        <View style={styles.itemProduct}>
             <Image source={{ url: 'https://cdn.concung.com/2022/06/57936-89792-large_mobile/sua-nutifood-varna-complete-850g.jpg' }} style={styles.ic_product} />
             <Text numberOfLines={2} style={styles.nameProduct}>{item.nameProduct}</Text>
-            <Text style={styles.price}>{item.price}</Text>
+            <View style={styles.addCart}>
+                <Text style={styles.price}>{item.price}</Text>
+                <Image source={require('../../image/addCart.png')} />
+            </View>
+
             <View style={styles.sale}>
                 <Text>30.000đ</Text>
                 <Text style={styles.borderSale}>20%</Text>
@@ -152,8 +169,11 @@ const ListProduct = ({ navigation, route }) => {
 
                 <TextInput style={styles.borderSearch} placeholder="Tìm kiếm sản phẩm" />
                 <Image source={require('../../image/shoppingcart.png')} style={styles.Cart} />
+               
+                
             </View>
             <View>
+
                 <FlatList
                     style={styles.listCategory}
                     data={categoryProduct}
