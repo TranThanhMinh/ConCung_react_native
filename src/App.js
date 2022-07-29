@@ -12,12 +12,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './main/HomeScreen';
-import SettingScreen from './main/SettingScreen';
+import PromotionScreen from './main/PromotionScreen';
 import CategoryScreen from './main/CategoryScreen';
 import AccountScreen from './main/AccountScreen';
 import LoadingScreen from './main/LoadingScreen';
 import ListProduct from './main/ListProductScreen';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -38,14 +37,32 @@ const MyDrawer = (props) => {
 const MyTabs = (props) => {
   return (
     <Tab.Navigator
-      screenOptions={{headerShown:false}} >
-      <Tab.Screen name="Home" children={() => <HomeScreen {...props} 
-       options={{
-        tabBarIcon: ({size, color}) => (<Icon name={"Home"} color={color} size={size} />),
-        title:'Trang chủ'
-       }} />} />
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = focused
+              ? require('./image/home.png')
+              : require('./image/home_2.png');
+          } else if (route.name === 'Category') {
+            iconName = focused ? require('./image/categories.png') : require('./image/categories_2.png');
+          }else if (route.name === 'Promotion') {
+            iconName = focused ? require('./image/bell.png') : require('./image/bell_2.png');
+          }else  {
+            iconName = focused ? require('./image/user.png') : require('./image/user_2.png');
+          }
+          
+  
+          return <Image source={iconName} style={{width:24,height:24}}/>
+        },
+        tabBarActiveTintColor: '#EE3E80',
+        tabBarInactiveTintColor: 'gray',
+        headerShown:false
+      })} >
+      <Tab.Screen name="Home" children={() => <HomeScreen {...props} />}options={{title:'Trang chủ'}}/>
       <Tab.Screen name="Category" children={() => <CategoryScreen {...props} />} options={{ title: 'Danh mục' }} />
-      <Tab.Screen name="Settings" children={() => <SettingScreen {...props} />} options={{ title: 'Cài đặt' }} />
+      <Tab.Screen name="Promotion" children={() => <PromotionScreen {...props} />} options={{ title: 'Khuyến mãi', tabBarBadge: 3 }} />
       <Tab.Screen name="Account" children={() => <AccountScreen {...props} />} options={{ title: 'Tài khoản' }} />
     </Tab.Navigator>
   );

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-const Setting = ({ navigation, route }) => {
+const Promotion = ({ navigation, route }) => {
     const getData = async ()=>{
         const user =await AsyncStorage.getItem("user");
         try {
@@ -25,4 +25,4 @@ const Setting = ({ navigation, route }) => {
     )
 }
 
-export default Setting;
+export default Promotion;

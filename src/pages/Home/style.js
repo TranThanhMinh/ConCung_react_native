@@ -6,7 +6,7 @@ console.log('numColumns2 '+width)
 
 export default style = StyleSheet.create({
   containner: {
-    marginTop: 50,
+    paddingTop: 50,
     flex: 1,
     backgroundColor:Color.white
   },

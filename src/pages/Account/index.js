@@ -123,7 +123,7 @@ const Account = ({ navigation, route }) => {
           <Text>Tài khoản</Text>
           <Image source={require('../../image/shoppingcart.png')} style ={styles.Cart}/>
         </View> */}
-        <Image source={{ uri: 'https://concung.com/themes/mobile4.1/image/customer-new.png' }} style={{ width: '100%', height: 200, resizeMode: 'stretch', }} />
+        <Image source={{ uri: 'https://concung.com/themes/mobile4.1/image/customer-new.png' }} style={{ width: '100%', height: 250, resizeMode: 'stretch', }} />
         <View style={styles.information}>
           <Image source={require('../../image/qr-code.png')} style={{ width: 40, height: 40 }} />
           <View style={styles.imfor2}>

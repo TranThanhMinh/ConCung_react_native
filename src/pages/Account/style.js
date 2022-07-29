@@ -3,7 +3,6 @@ import { color } from 'react-native-reanimated';
 import Color from '../../common/Color';
 export default style = StyleSheet.create({
   containner: {
-    marginTop: 50,
     flex: 1,
   },
   search: {
