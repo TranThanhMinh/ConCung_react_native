@@ -97,5 +97,5 @@ export default style = StyleSheet.create({
   viewAll:{
     textDecorationLine:"underline",
     color:Color.blue2,
-  }
+  },
 })

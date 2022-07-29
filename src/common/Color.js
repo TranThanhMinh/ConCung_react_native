@@ -10,4 +10,5 @@ export default{
     gray2:'#C0C0C0',
     gray3:'#ebebeb',
     pink:'#f54282',
+    black:'black',
 };
