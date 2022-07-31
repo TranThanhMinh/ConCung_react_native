@@ -124,13 +124,18 @@ const listProduct = [
 
 ]
 
-const ListProduct = ({ navigation, route }) => {
+const ListProduct = (props) => {
+    const { navigation } = props
+    const { route } = props
+    const { name } = route.params;
+
+    alert(name.nameProduct)
 
     const itemCategoryProduct = ({ item }) => (
         <ItemCategoryProduct name={item.name} image={item.image} />
     )
 
-    const BarCount =({count})=>{
+    const BarCount = ({ count }) => {
         <View>
             <Text>{count}</Text>
         </View>
@@ -140,10 +145,19 @@ const ListProduct = ({ navigation, route }) => {
         navigation.goBack();
     }
 
+    const clickItem = (item) => (
+        alert(item.nameProduct)
+    )
+
     const ItemProduct = ({ item }) => (
+
+
         <View style={styles.itemProduct}>
             <Image source={{ url: 'https://cdn.concung.com/2022/06/57936-89792-large_mobile/sua-nutifood-varna-complete-850g.jpg' }} style={styles.ic_product} />
-            <Text numberOfLines={2} style={styles.nameProduct}>{item.nameProduct}</Text>
+            <TouchableOpacity onPress={() => clickItem(item)}>
+                <Text numberOfLines={2} style={styles.nameProduct}>{item.nameProduct}</Text>
+            </TouchableOpacity>
+
             <View style={styles.addCart}>
                 <Text style={styles.price}>{item.price}</Text>
                 <Image source={require('../../image/addCart.png')} />
@@ -168,9 +182,26 @@ const ListProduct = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <TextInput style={styles.borderSearch} placeholder="Tìm kiếm sản phẩm" />
-                <Image source={require('../../image/shoppingcart.png')} style={styles.Cart} />
-               
-                
+                <View >
+                    <Image source={require('../../image/shoppingcart.png')} style={styles.Cart} />
+                    <View style={{
+                        backgroundColor: 'red',
+                        position: 'absolute',
+                        paddingHorizontal: 3,
+                        borderRadius: 10,
+                        top: -5,
+                        right: 10,
+                        justifyContent: "center",
+                        alignItems: "center",
+
+                    }}>
+                        <Text style={{ color: 'white', fontSize: 15 }} > 2 </Text>
+                    </View>
+
+                </View>
+
+
+
             </View>
             <View>
 

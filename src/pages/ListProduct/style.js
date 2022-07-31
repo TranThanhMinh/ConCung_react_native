@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     Cart: {
         width: 30,
         height: 30,
-        marginRight: 15,
+        marginRight:20
     },
 
     addCart: {
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     Back: {
         width: 30,
         height: 30,
-        marginLeft: 15,
+        marginLeft: 20,
     },
     listCategory: {
         marginTop: 10,

@@ -140,9 +140,9 @@ const listProduct = [
 
 const Home = ({ navigation, route }) => {
 
-    const toListProduct = async() => {
-       navigation.navigate("ListProduct");
-    
+    const toListProduct = async () => {
+        navigation.navigate("ListProduct");
+
     }
 
     const itemcategoryproduct = ({ item }) => (
@@ -155,18 +155,26 @@ const Home = ({ navigation, route }) => {
         </View>
     )
 
+    const onClickItemProduct = (item ) => (
+        navigation.navigate('ListProduct', { name: item })
+
+    )
+
+    
+
     const ItemProduct = ({ item }) => (
         <View>
-            <View style={styles.borderProduct}>
-                <Image source={{ uri: item.image }} style={styles.ic_product} />
-            </View>
-            <Text numberOfLines={2} style={styles.nameProduct}>{item.nameProduct}</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 5 }}>
-                <Text style={styles.priceProduct}>{item.price}</Text>
-                <Image source={require('../../image/add_shoppingcart.png')}
-                    styles={{ with: '100%', height: '100%' }} />
-            </View>
-
+            <TouchableOpacity onPress={() => onClickItemProduct(item)}>
+                <View style={styles.borderProduct}>
+                    <Image source={{ uri: item.image }} style={styles.ic_product} />
+                </View>
+                <Text numberOfLines={2} style={styles.nameProduct}>{item.nameProduct}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 5 }}>
+                    <Text style={styles.priceProduct}>{item.price}</Text>
+                    <Image source={require('../../image/add_shoppingcart.png')}
+                        styles={{ with: '100%', height: '100%' }} />
+                </View>
+            </TouchableOpacity>
         </View>
     )
 
@@ -178,6 +186,7 @@ const Home = ({ navigation, route }) => {
             const response = await fetch(API_SERVER.movies);
             const json = await response.json();
             setData(json.movies);
+            console.log(json.movies);
         } catch (error) {
             console.error(error);
         } finally {
@@ -197,7 +206,25 @@ const Home = ({ navigation, route }) => {
             <View style={styles.search}>
                 <Image source={require('../../image/scan.png')} style={styles.ic_back} />
                 <TextInput placeholder="tim kiem nhanh " style={styles.borderSearch} />
-                <Image source={require('../../image/shoppingcart.png')} style={styles.ic_back} />
+                <View>
+                    <Image source={require('../../image/shoppingcart.png')} style={styles.ic_cart} />
+                    <View style={{
+                        backgroundColor: 'red',
+                        borderRadius: 10,
+                        position: 'absolute',
+                        paddingHorizontal: 3,
+                        top: -5,
+                        right: 10,
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}>
+                        <Text style={{
+                            color: 'white',
+                            fontSize: 15
+                        }}> 2 </Text>
+                    </View>
+                </View>
+
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View>
