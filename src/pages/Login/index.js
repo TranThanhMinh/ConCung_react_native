@@ -14,7 +14,10 @@ const Login =  ({navigation,route}) => {
             Alert.alert('Vui long nhap mat khau')
         } else {
             try{
-               await AsyncStorage.setItem("user","tranthanhminh");
+               await AsyncStorage.setItem("user",JSON.stringify({
+                user:user,
+                pass:pass
+               }));
             }catch(error){
 
             }

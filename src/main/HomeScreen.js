@@ -7,10 +7,14 @@ let Utils = require('../common/Utils');
 const HomeScreen = ({ navigation, route }) => {
     const getData = async () => {
         const user = await AsyncStorage.getItem("user");
+        const login = JSON.parse(user);
+        Utils.username = login.user
+        console.log(login.user);
         try {
             if (user.length > 0)
                 Utils.isLogin = true
             else Utils.isLogin = false;
+
         }
         catch (error) {
             console.log(error);

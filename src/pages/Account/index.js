@@ -127,7 +127,7 @@ const Account = ({ navigation, route }) => {
         <View style={styles.information}>
           <Image source={require('../../image/qr-code.png')} style={{ width: 40, height: 40 }} />
           <View style={styles.imfor2}>
-            <Text>Minh Trần</Text>
+            <Text>{Utils.username}</Text>
             <Text>0355406448</Text>
           </View>
         </View>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, TextInput, Alert, Image, FlatList, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert, Image, FlatList, ScrollView, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../Promotion/style";
 
@@ -163,22 +163,21 @@ const Promotion = ({ navigation, route }) => {
         }
     }
 
+    const ItemAssignments = ({ item }) => (
+        <Text>{item.title}</Text>
+    )
 
 
-    const ItemNotification = ({ item }) => (
-        //console.log(JSON.stringify(item.assignments[0].title) +' a');
-        //  console.log(item.assignments + ' dịch')
 
-
+    const ItemPromotion = ({ item }) => (
         <View>
-            <Text style={styles.tite}>
-                {item.assignments
-                    .map((index) => (
-                        JSON.stringify(index.title)
-                       // console.log(JSON.stringify(index.title) + ' dịch')
-                    ))}</Text>
-            <Text>{item.day}</Text>
+            <Text style={styles.tite}>{item._id}</Text>
+            <FlatList
+                data={item.assignments}
+                renderItem={ItemAssignments} />
+
             <View style={styles.line} />
+
         </View>
     )
 
@@ -189,7 +188,8 @@ const Promotion = ({ navigation, route }) => {
         data: []
     }
 
-    const [data, setData] = useState([])
+    const [data, setData] = useState([]);
+    const [isLoading, setLoading] = useState(true)
 
     const getWorkouts = async () => {
         // try {
@@ -217,7 +217,9 @@ const Promotion = ({ navigation, route }) => {
 
             }).catch((error) => {
                 console.log(error + ' minh');
-            })
+            }).finally(
+                setLoading(false)
+            )
     }
 
 
@@ -232,23 +234,32 @@ const Promotion = ({ navigation, route }) => {
             <TouchableOpacity onPress={getData}>
                 <Text>Setting ten  </Text>
             </TouchableOpacity> */}
-                <Image source={{ uri: 'https://concung.com/themes/mobile4.1/image//banner_uu_dai.png' }} style={{ width: '100%', height: 200 }} />
-                <View style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                <View>
+                    <Image source={{ uri: 'https://concung.com/themes/mobile4.1/image//banner_uu_dai.png' }} style={{ width: '100%', height: 300 }} />
+                    <View style={{
+                        width: '100%',
+                        position: 'absolute',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        bottom: -25
 
-                }}>
-                    <Image source={{ uri: 'https://concung.com/themes/mobile4.1/image/icon/promotion_icon.webp' }}
-                        style={{
-                            width: 50,
-                            height: 50,
-                        }} />
+                    }}>
+                        <Image source={{ uri: 'https://concung.com/themes/mobile4.1/image/icon/promotion_icon.webp' }}
+                            style={{
+                                width: 50,
+                                height: 50,
+                            }} />
+                    </View>
                 </View>
 
-                <FlatList
-                    style={{ marginTop: 20, marginHorizontal: 10 }}
-                    data={data}
-                    renderItem={ItemNotification} />
+                {
+                    isLoading ? <ActivityIndicator size='large' /> :
+                        <FlatList
+                            style={{ marginTop: 40, marginHorizontal: 10 }}
+                            data={data}
+                            renderItem={ItemPromotion} />
+
+                }
 
             </View>
         </ScrollView>
