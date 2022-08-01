@@ -200,7 +200,7 @@ const Promotion = ({ navigation, route }) => {
         // } catch (error) {
         //     console.log(error);
         // }\
-        const url = 'https://demo2187508.mockable.io/workouts'
+        const url = API_SERVER_2.workouts
         fetch(url,
             {
                 method: 'GET',
@@ -213,10 +213,8 @@ const Promotion = ({ navigation, route }) => {
             .then((res) => res.json())
             .then((resJson) => {
                 setData(resJson.data);
-                console.log(resJson.data);
-
             }).catch((error) => {
-                console.log(error + ' minh');
+                console.log(error);
             }).finally(
                 setLoading(false)
             )

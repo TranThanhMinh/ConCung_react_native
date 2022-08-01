@@ -53,12 +53,10 @@ const MyTabs = (props) => {
           } else {
             iconName = focused ? require('./image/user.png') : require('./image/user_2.png');
           }
-
-
           return <Image source={iconName} style={{ width: 24, height: 24 }} />
         },
         tabBarActiveTintColor: '#EE3E80',
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: '#737071',
         headerShown: false
       })} >
       <Tab.Screen name="Home" children={() => <HomeScreen {...props} />} options={{ title: Strings.home }} />

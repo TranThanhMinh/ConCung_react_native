@@ -7,7 +7,7 @@ let Utils = require('../../common/Utils');
 
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Color from "../../common/Color";
-import FirstRoute from "./FirstRoute";
+import WattingDelivery from "./WattingDelivery";
 import style from "./style";
 
 
@@ -34,11 +34,11 @@ const Account = ({ navigation, route }) => {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'chogiao':
-        return <FirstRoute navigation={navigation} />;
+        return <WattingDelivery navigation={navigation} />;
       case 'danhgia':
         return <SecondRoute />;
       case 'danggiao':
-        return <FirstRoute navigation={navigation} />;
+        return <WattingDelivery navigation={navigation} />;
       case 'lichsu':
         return <SecondRoute />;
       default:
@@ -104,9 +104,7 @@ const Account = ({ navigation, route }) => {
         props => getTabBarIcon(props)
       }
       style={styles.tabBar}
-      indicatorStyle={styles.indicatorStyle}
-    
-    />
+      indicatorStyle={styles.indicatorStyle}/>
   );
 
 
@@ -118,11 +116,6 @@ const Account = ({ navigation, route }) => {
   return (
     <ScrollView>
       <View style={styles.containner}>
-        {/* <View style ={styles.top}>
-          <Image source={require('../../image/back.png')} style ={styles.Back}/>
-          <Text>Tài khoản</Text>
-          <Image source={require('../../image/shoppingcart.png')} style ={styles.Cart}/>
-        </View> */}
         <Image source={{ uri: 'https://concung.com/themes/mobile4.1/image/customer-new.png' }} style={{ width: '100%', height: 250, resizeMode: 'stretch', }} />
         <View style={styles.information}>
           <Image source={require('../../image/qr-code.png')} style={{ width: 40, height: 40 }} />
