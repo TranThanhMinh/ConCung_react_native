@@ -18,6 +18,10 @@ import AccountScreen from './main/AccountScreen';
 import LoadingScreen from './main/LoadingScreen';
 import ListProduct from './main/ListProductScreen';
 import Strings from './common/Strings';
+import DetailProduct from './main/DetailProductScreen'
+import CartScreen from './main/CartScreen';
+import { Store } from './redux/reducer';
+import { Provider } from 'react-redux';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -60,7 +64,7 @@ const MyTabs = (props) => {
         headerShown: false
       })} >
       <Tab.Screen name="Home" children={() => <HomeScreen {...props} />} options={{ title: Strings.home }} />
-      <Tab.Screen name="Category" children={() => <CategoryScreen {...props} />} options={{ title: Strings.home }} />
+      <Tab.Screen name="Category" children={() => <CategoryScreen {...props} />} options={{ title: Strings.ca }} />
       <Tab.Screen name="Promotion" children={() => <PromotionScreen {...props} />} options={{ title: Strings.promotion, tabBarBadge: 3 }} />
       <Tab.Screen name="Account" children={() => <AccountScreen {...props} />} options={{ title: Strings.account}} />
     </Tab.Navigator>
@@ -68,13 +72,17 @@ const MyTabs = (props) => {
 }
 const App = () => {
   return (
+    <Provider store={Store}>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Loading" component={LoadingScreen} options={{ title: "Tabs" }} />
         <Stack.Screen name="MyTabs" component={MyTabs} options={{ title: "MyTabs" }} />
         <Stack.Screen name="ListProduct" component={ListProduct} options={{ title: "ListProduct" }} />
+        <Stack.Screen name="DetailProduct" component={DetailProduct} options={{ title: "DetailProduct" }} />
+        <Stack.Screen name="CartScreen" component={CartScreen} options={{ title: "CartScreen" }} />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 export default App;

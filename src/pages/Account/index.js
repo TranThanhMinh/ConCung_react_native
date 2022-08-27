@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, useWindowDimensions, FlatList, SafeAreaView, ScrollView, Dimensions,ImageBackground } from "react-native";
+import { View, Text, TouchableOpacity, Image, useWindowDimensions, FlatList, SafeAreaView, ScrollView, Dimensions, ImageBackground, Alert } from "react-native";
 import styles from "./style";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 let Utils = require('../../common/Utils');
@@ -13,7 +13,9 @@ import style from "./style";
 
 
 
-const Account = ({ navigation, route }) => {
+const Account = (props) => {
+  const{navigation} = props
+  const{route} = props
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const layout = useWindowDimensions();
@@ -34,11 +36,15 @@ const Account = ({ navigation, route }) => {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'chogiao':
-        return <WattingDelivery navigation={navigation} />;
+        return <WattingDelivery navigation={navigation}
+          goHome={() => {
+            navigation.navigate('Home');
+          }
+          } />;
+      case 'danggiao':
+        return <SecondRoute />;
       case 'danhgia':
         return <SecondRoute />;
-      case 'danggiao':
-        return <WattingDelivery navigation={navigation} />;
       case 'lichsu':
         return <SecondRoute />;
       default:
@@ -53,19 +59,8 @@ const Account = ({ navigation, route }) => {
     if (route.key === 'chogiao') {
 
       return (
-        <View style={{ justifyContent: 'center', alignItems: 'center',flex:1 }}>
-          <Image source={require('../../image/wall-clock.png')} style={{ width: 30, height: 30, }} />
-          <Text
-            style={{ color: 'black' }}>
-            {route.title}
-          </Text>
-        </View>
-      );
-
-    } else if (route.key === 'danhgia') {
-      return (
-        <View style={{ justifyContent: 'center', alignItems: 'center',flex:1 }}>
-          <Image source={require('../../image/gift.png')} style={{ width: 30, height: 30, }} />
+        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+          <Image source={require('../../image/time-left.png')} style={styles.iconBar} />
           <Text
             style={{ color: 'black' }}>
             {route.title}
@@ -75,8 +70,19 @@ const Account = ({ navigation, route }) => {
 
     } else if (route.key === 'danggiao') {
       return (
-        <View style={{ justifyContent: 'center', alignItems: 'center',flex:1 }}>
-          <Image source={require('../../image/scan.png')} style={{ width: 30, height: 30, }} />
+        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+          <Image source={require('../../image/delivery.png')} style={styles.iconBar} />
+          <Text
+            style={{ color: 'black' }}>
+            {route.title}
+          </Text>
+        </View>
+      );
+
+    } else if (route.key === 'danhgia') {
+      return (
+        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+          <Image source={require('../../image/star_2.png')} style={styles.iconBar} />
           <Text
             style={{ color: 'black' }}>
             {route.title}
@@ -86,8 +92,8 @@ const Account = ({ navigation, route }) => {
 
     } else {
       return (
-        <View style={{ justifyContent: 'center', alignItems: 'center',flex:1 }}>
-          <Image source={require('../../image/scan.png')} style={{ width: 30, height: 30, }} />
+        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+          <Image source={require('../../image/history.png')} style={styles.iconBar} />
           <Text
             style={{ color: 'black' }}>
             {route.title}
@@ -104,7 +110,7 @@ const Account = ({ navigation, route }) => {
         props => getTabBarIcon(props)
       }
       style={styles.tabBar}
-      indicatorStyle={styles.indicatorStyle}/>
+      indicatorStyle={styles.indicatorStyle} />
   );
 
 
@@ -113,6 +119,7 @@ const Account = ({ navigation, route }) => {
     Utils.isLogin = false;
     navigation.navigate('Home')
   }
+
   return (
     <ScrollView>
       <View style={styles.containner}>
@@ -126,7 +133,7 @@ const Account = ({ navigation, route }) => {
         </View>
         <View>
           <TabView
-            style={{ height: 200,backgroundColor: Color.white,}}
+            style={{ height: 200, backgroundColor: Color.white, }}
             navigationState={{ index, routes }}
             renderScene={renderScene}
             onIndexChange={setIndex}

@@ -249,9 +249,8 @@ const Promotion = ({ navigation, route }) => {
                             }} />
                     </View>
                 </View>
-
                 {
-                    isLoading ? <ActivityIndicator size='large' /> :
+                    isLoading ? <ActivityIndicator size='large' style={{ marginTop: 50 }} /> :
                         <FlatList
                             style={{ marginTop: 40, marginHorizontal: 10 }}
                             data={data}

@@ -56,9 +56,9 @@ const categoryProduct = [{
 const listProduct = [
     {
         idProduct: 1,
-        nameProduct: "Tã quần Rascal + Friends (L, 10-15kg, 52 miếng)",
+        nameProduct: "Tã quần Rascal + Friends",
         image: "https://cdn.concung.com/2021/10/52398-75559-large_mobile/ta-quan-rascal-friends-l-10-15kg-52-mieng.jpg",
-        price: "25.000đ"
+        price: "350.000đ"
     },
     {
         idProduct: 2,
@@ -127,9 +127,9 @@ const listProduct = [
 const ListProduct = (props) => {
     const { navigation } = props
     const { route } = props
-    const { name } = route.params;
+   // const { name } = route.params;
 
-    alert(name.nameProduct)
+  //  alert(name.nameProduct)
 
     const itemCategoryProduct = ({ item }) => (
         <ItemCategoryProduct name={item.name} image={item.image} />
@@ -142,11 +142,12 @@ const ListProduct = (props) => {
     }
 
     const backHome = () => {
-        navigation.goBack();
+        props.goBack();
     }
 
     const clickItem = (item) => (
-        alert(item.nameProduct)
+        props.detailProduct(item)
+    //   navigation.navigate('DetailProduct', { product: item })
     )
 
     const ItemProduct = ({ item }) => (
@@ -170,9 +171,6 @@ const ListProduct = (props) => {
         </View>
 
     )
-
-
-
 
     return (
         <View style={styles.container}>
@@ -199,9 +197,6 @@ const ListProduct = (props) => {
                     </View>
 
                 </View>
-
-
-
             </View>
             <View>
 

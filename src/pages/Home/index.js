@@ -138,7 +138,10 @@ const listProduct = [
 
 
 
-const Home = ({ navigation, route }) => {
+const Home = (props) => {
+
+    const{navigation} = props
+    const{route} = props
 
     const toListProduct = async () => {
         navigation.navigate("ListProduct");
@@ -156,7 +159,7 @@ const Home = ({ navigation, route }) => {
     )
 
     const onClickItemProduct = (item ) => (
-        navigation.navigate('ListProduct', { name: item })
+        navigation.navigate('DetailProduct', { product: item })
 
     )
 
@@ -199,13 +202,17 @@ const Home = ({ navigation, route }) => {
 
     }, []);
 
-
+    const toCart =()=>(
+        navigation.navigate('CartScreen')
+    )
 
     return (
+        
         <View style={styles.containner}>
             <View style={styles.search}>
                 <Image source={require('../../image/scan.png')} style={styles.ic_back} />
                 <TextInput placeholder="tim kiem nhanh " style={styles.borderSearch} />
+                <TouchableOpacity onPress={() =>toCart}>
                 <View>
                     <Image source={require('../../image/shoppingcart.png')} style={styles.ic_cart} />
                     <View style={{
@@ -224,7 +231,7 @@ const Home = ({ navigation, route }) => {
                         }}> 2 </Text>
                     </View>
                 </View>
-
+                </TouchableOpacity>
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View>
