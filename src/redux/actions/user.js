@@ -4,7 +4,7 @@ export const LOGIN='LOGIN'
 export const login = params => {
     console.log('params', JSON.stringify(params))
 
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch({ type: LOGIN, data: "Login thành công" })
     }
 

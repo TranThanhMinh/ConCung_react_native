@@ -11,8 +11,12 @@ function userReducer(state ={},action){
         message: '',
       };
     }
+    default:
+      return state;
   }
 }
+
+export default userReducer
 
 // import { applyMiddleware, combineReducers,createStore } from "redux";
 

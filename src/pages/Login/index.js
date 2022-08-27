@@ -5,6 +5,7 @@ import styles from "./style";
 import { useSelector, useDispatch } from "react-redux";
 import { State } from "react-native-gesture-handler";
  import { login } from '../../redux/actions/user'
+ import {LOGIN} from '../../redux/actions/user'
 
 const Login = ({ navigation, route }) => {
     const [user, setUser] = useState('');
@@ -15,7 +16,7 @@ const Login = ({ navigation, route }) => {
     useEffect(()=>{
         const{type,data,message} = userReducer
         switch(type){
-           case "LOGIN":
+           case LOGIN:
             console.log('LOGIN2',JSON.stringify(data))
             break
         }
