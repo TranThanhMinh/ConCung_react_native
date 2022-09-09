@@ -1,0 +1,10 @@
+export const INCREMENT = 'INCREMENT'
+export const LOGIN = 'LOGIN'
+
+export const WORKOUTS_PENĐING = 'WORKOUTS_PENĐING'
+export const WORKOUTS_SUCCESS = 'WORKOUTS_SUCCESS'
+export const WORKOUTS_FAIL = 'WORKOUTS_FAIL'
+
+export const LOGIN_PENĐING = 'LOGIN_PENĐING'
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGIN_FAIL = 'LOGIN_FAIL'

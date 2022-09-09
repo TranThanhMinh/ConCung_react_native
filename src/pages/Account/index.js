@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, useWindowDimensions, FlatList, SafeAreaView, ScrollView, Dimensions, ImageBackground, Alert } from "react-native";
+import { View, Text, TouchableOpacity, Image, useWindowDimensions, FlatList, SafeAreaView, ScrollView, Dimensions,
+   ImageBackground, Alert ,Platform} from "react-native";
 import styles from "./style";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 let Utils = require('../../common/Utils');
@@ -9,13 +10,46 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Color from "../../common/Color";
 import WattingDelivery from "./WattingDelivery";
 import style from "./style";
+import { ApplePayButton, PaymentRequest } from 'react-native-payments';
+import { GooglePay } from 'react-native-google-pay';
 
 
 
+
+const allowedCardNetworks = ['VISA', 'MASTERCARD'];
+const allowedCardAuthMethods = ['PAN_ONLY', 'CRYPTOGRAM_3DS'];
+
+
+
+const METHOD_DATA = [
+  {
+    supportedMethods: ['apple-pay'],
+    data: {
+      merchantIdentifier: 'merchant.com.your-app.namespace',
+      supportedNetworks: ['visa', 'mastercard', 'amex'],
+      countryCode: 'US',
+      currencyCode: 'USD',
+    },
+  },
+];
+
+const DETAILS = {
+  id: 'basic-example',
+  displayItems: [
+    {
+      label: 'Movie Ticket',
+      amount: { currency: 'USD', value: '15.00' },
+    },
+  ],
+  total: {
+    label: 'Merchant Name',
+    amount: { currency: 'USD', value: '15.00' },
+  },
+};
 
 const Account = (props) => {
-  const{navigation} = props
-  const{route} = props
+  const { navigation } = props
+  const { route } = props
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const layout = useWindowDimensions();
@@ -27,6 +61,27 @@ const Account = (props) => {
     { key: 'danhgia', title: 'Đánh giá', image: '../../image/wall-clock.png' },
     { key: 'lichsu', title: 'Lịch sử', image: '../../image/wall-clock.png' },
   ]);
+
+  if (Platform.OS === 'android') {
+  // Set the environment before the payment request
+  GooglePay.setEnvironment(GooglePay.ENVIRONMENT_TEST);
+  }
+
+ const payWithGooglePay = (requestData) => {
+  // // Check if Google Pay is available
+  GooglePay.isReadyToPay(allowedCardNetworks, allowedCardAuthMethods)
+    .then((ready) => {
+      if (ready) {
+        // Request payment token
+        GooglePay.requestPayment(requestData)
+          .then((token) => {
+            // Send a token to your payment gateway
+          })
+          .catch((error) => console.log(error.code, error.message));
+      }
+    })
+  }
+
 
 
   const SecondRoute = () => (
@@ -50,6 +105,38 @@ const Account = (props) => {
       default:
         return null;
     }
+  };
+
+  const requestData = {
+    cardPaymentMethod: {
+      tokenizationSpecification: {
+        type: 'PAYMENT_GATEWAY',
+        // stripe (see Example):
+        gateway: 'stripe',
+        gatewayMerchantId: '',
+        stripe: {
+          publishableKey: 'pk_test_TYooMQauvdEDq54NiTphI7jx',
+          version: '2018-11-08',
+        },
+        // other:
+        gateway: 'example',
+        gatewayMerchantId: 'exampleGatewayMerchantId',
+      },
+      allowedCardNetworks,
+      allowedCardAuthMethods,
+    },
+    transaction: {
+      totalPrice: '10',
+      totalPriceStatus: 'FINAL',
+      currencyCode: 'USD',
+    },
+    merchantName: 'Example Merchant',
+  };
+
+
+  const showPaymentSheet = () => {
+    const paymentRequest = new PaymentRequest(METHOD_DATA, DETAILS);
+    paymentRequest.show();
   };
 
   const getTabBarIcon = (props) => {
@@ -184,6 +271,17 @@ const Account = (props) => {
             <Text style={styles.text}>Bình luận của tôi</Text>
           </View>
 
+          <View style={styles.line2} />
+          <TouchableOpacity style={styles.row} onPress={() => Platform.OS == 'ios' ? showPaymentSheet() : payWithGooglePay(requestData)} >
+            <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
+            <Text style={styles.text}>Thanh toán</Text>
+          </TouchableOpacity>
+
+          {/* <ApplePayButton
+            type="plain"
+            style="black"
+            onPress={()=>showPaymentSheet()}
+          /> */}
 
         </View>
         <View style={styles.line} />

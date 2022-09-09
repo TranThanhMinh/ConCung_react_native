@@ -2,46 +2,14 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, TextInput, Alert, Image, FlatList, ScrollView, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../Promotion/style";
+import { useSelector, useDispatch } from 'react-redux';
+import { workouts } from '@actions/promotion';
+import * as ActionTypes from '@actions/ActionTypes'
 
 
 let API_SERVER_2 = require('../../common/Api')
 
 
-const listNotification = [{
-    id: 1,
-    title: 'Bĩm tả 100% trúng quà',
-    information: '🌿Cho mỗi hoá đơn 500k mua tã: Bobby, Huggies, Genki, Whito, Rascal,\n🎁Quà siêu khủng Xe Vespa, iPhone 13 Pro Max, Máy giặt sấy, Tủ lạnh,...👉Chốt ngay kẻo lỡ\n⏰Áp dụng đến 31/8'
-},
-{
-    id: 1,
-    title: 'Bĩm tả 100% trúng quà',
-    information: '🌿Cho mỗi hoá đơn 500k mua tã: Bobby, Huggies, Genki, Whito, Rascal,\n🎁Quà siêu khủng Xe Vespa, iPhone 13 Pro Max, Máy giặt sấy, Tủ lạnh,...👉Chốt ngay kẻo lỡ\n⏰Áp dụng đến 31/8'
-},
-{
-    id: 1,
-    title: 'Bĩm tả 100% trúng quà',
-    information: '🌿Cho mỗi hoá đơn 500k mua tã: Bobby, Huggies, Genki, Whito, Rascal,\n🎁Quà siêu khủng Xe Vespa, iPhone 13 Pro Max, Máy giặt sấy, Tủ lạnh,...👉Chốt ngay kẻo lỡ\n⏰Áp dụng đến 31/8'
-},
-{
-    id: 1,
-    title: 'Bĩm tả 100% trúng quà',
-    information: '🌿Cho mỗi hoá đơn 500k mua tã: Bobby, Huggies, Genki, Whito, Rascal,\n🎁Quà siêu khủng Xe Vespa, iPhone 13 Pro Max, Máy giặt sấy, Tủ lạnh,...👉Chốt ngay kẻo lỡ\n⏰Áp dụng đến 31/8'
-},
-{
-    id: 1,
-    title: 'Bĩm tả 100% trúng quà',
-    information: '🌿Cho mỗi hoá đơn 500k mua tã: Bobby, Huggies, Genki, Whito, Rascal,\n🎁Quà siêu khủng Xe Vespa, iPhone 13 Pro Max, Máy giặt sấy, Tủ lạnh,...👉Chốt ngay kẻo lỡ\n⏰Áp dụng đến 31/8'
-},
-{
-    id: 1,
-    title: 'Bĩm tả 100% trúng quà',
-    information: '🌿Cho mỗi hoá đơn 500k mua tã: Bobby, Huggies, Genki, Whito, Rascal,\n🎁Quà siêu khủng Xe Vespa, iPhone 13 Pro Max, Máy giặt sấy, Tủ lạnh,...👉Chốt ngay kẻo lỡ\n⏰Áp dụng đến 31/8'
-},
-{
-    id: 1,
-    title: 'Bĩm tả 100% trúng quà',
-    information: '🌿Cho mỗi hoá đơn 500k mua tã: Bobby, Huggies, Genki, Whito, Rascal,\n🎁Quà siêu khủng Xe Vespa, iPhone 13 Pro Max, Máy giặt sấy, Tủ lạnh,...👉Chốt ngay kẻo lỡ\n⏰Áp dụng đến 31/8'
-}]
 
 const list =
     [
@@ -152,6 +120,10 @@ const list =
 
 
 const Promotion = ({ navigation, route }) => {
+
+    const dispacth = useDispatch()
+    const { promotionReducer } = useSelector(state => state)
+
     const getData = async () => {
         const user = await AsyncStorage.getItem("user");
         try {
@@ -171,10 +143,10 @@ const Promotion = ({ navigation, route }) => {
 
     const ItemPromotion = ({ item }) => (
         <View>
-            <Text style={styles.tite}>{item._id}</Text>
-            <FlatList
+            <Text style={styles.tite}>{item.name}</Text>
+            {/* <FlatList
                 data={item.assignments}
-                renderItem={ItemAssignments} />
+                renderItem={ItemAssignments} /> */}
 
             <View style={styles.line} />
 
@@ -191,39 +163,30 @@ const Promotion = ({ navigation, route }) => {
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(true)
 
-    const getWorkouts = async () => {
-        // try {
-        //     const response = await fetch('https://demo2187508.mockable.io/workouts');
-        //     const json = await response.json();
-        //     setData(json.data);
-        //     console.log(json.data[0].assignments[0].title);
-        // } catch (error) {
-        //     console.log(error);
-        // }\
-        const url = API_SERVER_2.workouts
-        fetch(url,
-            {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
 
-            })
-            .then((res) => res.json())
-            .then((resJson) => {
-                setData(resJson.data);
-            }).catch((error) => {
-                console.log(error);
-            }).finally(
+    useEffect(() => {
+        const{type,data,message}  = promotionReducer
+        switch (type) {
+            case ActionTypes.WORKOUTS_PENĐING:
+                console.log('WORKOUTS_PENĐING')
+            case ActionTypes.WORKOUTS_SUCCESS:
+                console.log('WORKOUTS_SUCCESS' + data)
                 setLoading(false)
-            )
+                setData(data);
+                break
+            case ActionTypes.WORKOUTS_FAIL:
+                break
+        }
+    }, [promotionReducer])
+
+    const getWorkouts = async () => {
+        dispacth(workouts())
     }
 
 
     useEffect(() => {
         getWorkouts();
-    })
+    },[])
 
     return (
         <ScrollView>

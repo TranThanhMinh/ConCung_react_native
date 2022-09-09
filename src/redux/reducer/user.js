@@ -1,14 +1,23 @@
-import {LOGIN,INCREMENT} from '../actions/user'
+
+import * as ActionTypes from '../actions/ActionTypes'
 
 function userReducer(state ={},action){
   switch(action.type){
-    case INCREMENT:
-    case LOGIN:{
+    case ActionTypes.LOGIN_PENĐING:
+    case ActionTypes.LOGIN_SUCCESS:{
       return {
         ...state,
         type: action.type,
         data:action.data,
         message: '',
+      };
+    }
+    case ActionTypes.LOGIN_FAIL:{
+      return {
+        ...state,
+        type: action.type,
+        data:action.data,
+        message: action.message,
       };
     }
     default:
@@ -17,14 +26,3 @@ function userReducer(state ={},action){
 }
 
 export default userReducer
-
-// import { applyMiddleware, combineReducers,createStore } from "redux";
-
-// import {loginReducer} from "../actions/user";
-// import thunk from 'redux-thunk';
-
-// const allReducers = combineReducers({
-//   loginReducer,
-// });
-
-// export const Store = createStore(allReducers,applyMiddleware(thunk))

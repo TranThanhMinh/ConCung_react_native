@@ -24,6 +24,7 @@ import { Store } from './redux/reducer';
 import { Provider } from 'react-redux';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import Constants from './common/Constants';
 
 //const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -32,7 +33,7 @@ const Tab = createBottomTabNavigator();
 const MyDrawer = (props) => {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="MyTabs" children={() => <MyTabs {...props} />} />
+      <Drawer.Screen name={Constants.Screen.MyTabs} children={() => <MyTabs {...props} />} />
       <Drawer.Screen name="Category" children={() => <CategoryScreen {...props} />} />
     </Drawer.Navigator>
   );
@@ -40,19 +41,20 @@ const MyDrawer = (props) => {
 
 
 const MyTabs = (props) => {
+  console.disableYellowBox = true;
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === 'Home') {
+          if (route.name === Constants.Screen.Home) {
             iconName = focused
               ? require('./image/home.png')
               : require('./image/home_2.png');
-          } else if (route.name === 'Category') {
+          } else if (route.name === Constants.Screen.Category) {
             iconName = focused ? require('./image/categories.png') : require('./image/categories_2.png');
-          } else if (route.name === 'Promotion') {
+          } else if (route.name === Constants.Screen.Promotion) {
             iconName = focused ? require('./image/bell.png') : require('./image/bell_2.png');
           } else {
             iconName = focused ? require('./image/user.png') : require('./image/user_2.png');
@@ -63,10 +65,10 @@ const MyTabs = (props) => {
         tabBarInactiveTintColor: '#737071',
         headerShown: false
       })} >
-      <Tab.Screen name="Home" children={() => <HomeScreen {...props} />} options={{ title: Strings.home }} />
-      <Tab.Screen name="Category" children={() => <CategoryScreen {...props} />} options={{ title: Strings.ca }} />
-      <Tab.Screen name="Promotion" children={() => <PromotionScreen {...props} />} options={{ title: Strings.promotion, tabBarBadge: 3 }} />
-      <Tab.Screen name="Account" children={() => <AccountScreen {...props} />} options={{ title: Strings.account}} />
+      <Tab.Screen name={Constants.Screen.Home} children={() => <HomeScreen {...props} />} options={{ title: Strings.home }} />
+      <Tab.Screen name={Constants.Screen.Category} children={() => <CategoryScreen {...props} />} options={{ title: Strings.ca }} />
+      <Tab.Screen name={Constants.Screen.Promotion} children={() => <PromotionScreen {...props} />} options={{ title: Strings.promotion, tabBarBadge: 3 }} />
+      <Tab.Screen name={Constants.Screen.Account} children={() => <AccountScreen {...props} />} options={{ title: Strings.account}} />
     </Tab.Navigator>
   );
 }
