@@ -85,7 +85,7 @@ export default style = StyleSheet.create({
   },
   tabBar: {
     height: 65,
-    backgroundColor: Color.pink,
+    backgroundColor: '#ffaaca',
   },
   indicatorStyle: {
     backgroundColor: 'white',
@@ -119,5 +119,9 @@ export default style = StyleSheet.create({
     justifyContent: "space-between",
     width: '100%',
   },
+
+  iconBar:{
+    width: 25, height: 25,
+  }
 
 })

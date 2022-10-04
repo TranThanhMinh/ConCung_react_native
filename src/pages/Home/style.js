@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions,Platform } from 'react-native';
 import Color from '../../common/Color';
 const width = Dimensions.get('window').width
 
@@ -6,7 +6,8 @@ console.log('numColumns2 ' + width)
 
 export default style = StyleSheet.create({
   containner: {
-    paddingTop: 50,
+    
+    paddingTop:  Platform.OS === 'ios' ? 50 : 10,
     flex: 1,
     backgroundColor: Color.white
   },
