@@ -1,8 +1,9 @@
-import React from "react";
-import { View, Text, TouchableOpacity, Image, useWindowDimensions, FlatList, SafeAreaView, ScrollView, Dimensions,
-   ImageBackground, Alert ,Platform} from "react-native";
+import React, { useState } from "react";
+import {
+  View, Text, TouchableOpacity, Image, useWindowDimensions, FlatList, SafeAreaView, ScrollView, Dimensions,
+  ImageBackground, Alert, Platform
+} from "react-native";
 import styles from "./style";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 let Utils = require('../../common/Utils');
 
 
@@ -10,16 +11,26 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Color from "../../common/Color";
 import WattingDelivery from "./WattingDelivery";
 import style from "./style";
-import { ApplePayButton, PaymentRequest } from 'react-native-payments';
+
+import { useTranslation, initReactI18next } from "react-i18next";
+
+const PaymentRequest = require('react-native-payments').PaymentRequest
 import { GooglePay } from 'react-native-google-pay';
 
-
+import Dialog from "react-native-dialog";
+import i18n from "i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const allowedCardNetworks = ['VISA', 'MASTERCARD'];
 const allowedCardAuthMethods = ['PAN_ONLY', 'CRYPTOGRAM_3DS'];
 
-
+const OPTIONS = {
+  requestPayerName: true,
+  requestPayerPhone: true,
+  requestPayerEmail: true,
+  requestShipping: true
+};
 
 const METHOD_DATA = [
   {
@@ -33,27 +44,86 @@ const METHOD_DATA = [
   },
 ];
 
+const METHOD_DATA_Android = [{
+  supportedMethods: ['android-pay'],
+  data: {
+    supportedNetworks: ['visa', 'mastercard', 'amex'],
+    currencyCode: 'USD',
+    environment: 'TEST', // defaults to production
+    paymentMethodTokenizationParameters: {
+      tokenizationType: 'NETWORK_TOKEN',
+      parameters: {
+        publicKey: 'your-pubic-key'
+      }
+    }
+  }
+}];
+
+const ANDROID_METHOD_DATA = [
+  {
+    supportedMethods: ['android-pay'],
+    data: {
+      supportedNetworks: ['visa', 'mastercard', 'amex'],
+      currencyCode: 'USD',
+      environment: 'TEST', // defaults to production
+      paymentMethodTokenizationParameters: {
+        tokenizationType: "GATEWAY_TOKEN",
+        // tokenizationType: 'NETWORK_TOKEN',
+        parameters: {
+          publicKey: 'pk_test_51I5wapmXmOyoqYiJvT9QU00JMWuQtpg',
+          gateway: "stripe",
+          'stripe:publishableKey':
+            'pk_test_51SjonY7g500rYY0D6YE',
+
+        },
+      },
+    },
+  },
+];
+
+const DETAILS2 = {
+  id: 'simple-basket',
+  displayItems: [
+    { amount: { value: "369.00", currency: "USD" }, label: "Product 1 " },
+    { amount: { value: "10.00", currency: "USD" }, label: "Shipping" }
+  ],
+  total: {
+    label: 'Grand Total',
+    amount: { currency: 'USD', value: '379.00' }
+  }
+};
 const DETAILS = {
   id: 'basic-example',
   displayItems: [
     {
       label: 'Movie Ticket',
-      amount: { currency: 'USD', value: '15.00' },
+      amount: { currency: 'USD', value: '15.00' }
     },
+    {
+      label: 'Grocery',
+      amount: { currency: 'USD', value: '5.00' }
+    }
   ],
+  shippingOptions: [{
+    id: 'economy',
+    label: 'Economy Shipping',
+    amount: { currency: 'USD', value: '0.00' },
+    detail: 'Arrives in 3-5 days' // `detail` is specific to React Native Payments
+  }],
   total: {
-    label: 'Merchant Name',
-    amount: { currency: 'USD', value: '15.00' },
-  },
+    label: 'Enappd Store',
+    amount: { currency: 'USD', value: '20.00' }
+  }
 };
-
 const Account = (props) => {
   const { navigation } = props
   const { route } = props
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const layout = useWindowDimensions();
+  const { t } = useTranslation()
 
+  const [visible, setVisible] = useState(false);
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'chogiao', title: 'Chờ giao', image: '../../image/wall-clock.png' },
@@ -63,23 +133,23 @@ const Account = (props) => {
   ]);
 
   if (Platform.OS === 'android') {
-  // Set the environment before the payment request
-  GooglePay.setEnvironment(GooglePay.ENVIRONMENT_TEST);
+    // Set the environment before the payment request
+    GooglePay.setEnvironment(GooglePay.ENVIRONMENT_TEST);
   }
 
- const payWithGooglePay = (requestData) => {
-  // // Check if Google Pay is available
-  GooglePay.isReadyToPay(allowedCardNetworks, allowedCardAuthMethods)
-    .then((ready) => {
-      if (ready) {
-        // Request payment token
-        GooglePay.requestPayment(requestData)
-          .then((token) => {
-            // Send a token to your payment gateway
-          })
-          .catch((error) => console.log(error.code, error.message));
-      }
-    })
+  const payWithGooglePay = (requestData) => {
+    // // Check if Google Pay is available
+    GooglePay.isReadyToPay(allowedCardNetworks, allowedCardAuthMethods)
+      .then((ready) => {
+        if (ready) {
+          // Request payment token
+          GooglePay.requestPayment(requestData)
+            .then((token) => {
+              // Send a token to your payment gateway
+            })
+            .catch((error) => console.log(error.code, error.message));
+        }
+      })
   }
 
 
@@ -135,7 +205,25 @@ const Account = (props) => {
 
 
   const showPaymentSheet = () => {
-    const paymentRequest = new PaymentRequest(METHOD_DATA, DETAILS);
+    const paymentRequest = new PaymentRequest(METHOD_DATA, DETAILS, OPTIONS);
+    paymentRequest.show()
+      .then(paymentResponse => {
+        const { transactionIdentifier, paymentData } = paymentResponse.details;
+        console.log('paymentResponse.details  ' + JSON.stringify(paymentResponse.details))
+        // return fetch('...', {
+        //   method: 'POST',
+        //   body: {
+        //     transactionIdentifier,
+        //     paymentData
+        //   }
+        // })
+        //   .then(res => res.json())
+        //   .then(successHandler)
+        //   .catch(errorHandler)
+      });
+  };
+  const showPaymentSheet2 = () => {
+    const paymentRequest = new PaymentRequest(ANDROID_METHOD_DATA, DETAILS);
     paymentRequest.show();
   };
 
@@ -207,9 +295,53 @@ const Account = (props) => {
     navigation.navigate('Home')
   }
 
+
+
+  function changeLanguge() {
+    return (
+      <Dialog.Container visible={visible}>
+        <Dialog.Title> Cài đặt ngôn ngữ</Dialog.Title>
+        {/* <Dialog.Description>
+        Cài đặt ngôn ngữ
+      </Dialog.Description> */}
+        <Dialog.Button label="Việt Nam" onPress={handleCancel} />
+        <Dialog.Button label="Tiếng Anh" onPress={handleDelete} />
+      </Dialog.Container>
+    )
+  }
+
+  const showChangeLanguge = () => {
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
+    global.multilanguge = 'vi';
+    saveLanguge(global.multilanguge)
+    i18n.changeLanguage(global.multilanguge)
+    setVisible(false);
+  };
+
+  const saveLanguge = (language) => {
+    try {
+      AsyncStorage.setItem("language", language);
+    } catch (error) {
+
+    }
+  }
+
+  const handleDelete = () => {
+    // The user has pressed the "Delete" button, so here you can do your own logic.
+    // ...Your logic
+    global.multilanguge = 'en';
+    i18n.changeLanguage(global.multilanguge)
+    saveLanguge(global.multilanguge)
+    setVisible(false);
+  };
+
   return (
     <ScrollView>
       <View style={styles.containner}>
+        {changeLanguge()}
         <Image source={{ uri: 'https://concung.com/themes/mobile4.1/image/customer-new.png' }} style={{ width: '100%', height: 250, resizeMode: 'stretch', }} />
         <View style={styles.information}>
           <Image source={require('../../image/qr-code.png')} style={{ width: 40, height: 40 }} />
@@ -231,7 +363,7 @@ const Account = (props) => {
         <View style={{ backgroundColor: Color.white }}>
           <View style={styles.row}>
             <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
-            <Text style={styles.text}>Mã giảm giá</Text>
+            <Text style={styles.text}>{t('account.discount.code')}</Text>
           </View>
           <View style={styles.line2} />
           <View style={styles.row}>
@@ -272,9 +404,15 @@ const Account = (props) => {
           </View>
 
           <View style={styles.line2} />
-          <TouchableOpacity style={styles.row} onPress={() => Platform.OS == 'ios' ? showPaymentSheet() : payWithGooglePay(requestData)} >
+          <TouchableOpacity style={styles.row} onPress={() => Platform.OS == 'ios' ? showPaymentSheet() : showPaymentSheet2()} >
             <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
             <Text style={styles.text}>Thanh toán</Text>
+          </TouchableOpacity>
+
+          <View style={styles.line2} />
+          <TouchableOpacity style={styles.row} onPress={() => showChangeLanguge()} >
+            <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
+            <Text style={styles.text}>Ngôn ngu</Text>
           </TouchableOpacity>
 
           {/* <ApplePayButton

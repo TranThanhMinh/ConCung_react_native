@@ -10,6 +10,7 @@ export default{
     Home:'Home',
     Category:'Category',
     Promotion:'Promotion',
-    Account:'Account'
+    Account:'Account',
+    ShopRecently:'ShopRecently'
  }
 }

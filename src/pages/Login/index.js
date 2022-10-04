@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Alert, TextInput, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, Alert, TextInput } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "./style";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,7 +7,7 @@ import { State } from "react-native-gesture-handler";
 import { loginAccount } from '../../redux/actions/user';
 import * as ActionTypes from '@actions/ActionTypes'
 import  Toast  from 'react-native-toast-message';
-
+import Loading from '../../component/Loading';
 import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 
 // { navigation, route }
@@ -79,7 +79,7 @@ const Login = (props) => {
             </TouchableOpacity>
             {
 
-                loading ? <ActivityIndicator size="large" color="#0000ff" /> : null
+                loading ? <Loading/> : null
             }
         </View>
     )

@@ -5,6 +5,7 @@ import styles from "../Promotion/style";
 import { useSelector, useDispatch } from 'react-redux';
 import { workouts } from '@actions/promotion';
 import * as ActionTypes from '@actions/ActionTypes'
+import Loading from '../../component/Loading';
 
 
 let API_SERVER_2 = require('../../common/Api')
@@ -213,7 +214,7 @@ const Promotion = ({ navigation, route }) => {
                     </View>
                 </View>
                 {
-                    isLoading ? <ActivityIndicator size='large' style={{ marginTop: 50 }} /> :
+                    isLoading ? <Loading/> :
                         <FlatList
                             style={{ marginTop: 40, marginHorizontal: 10 }}
                             data={data}
