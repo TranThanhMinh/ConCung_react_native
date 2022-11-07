@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, TextInput, ScrollView, FlatList, SafeAreaView, ActivityIndicator } from "react-native";
 import styles from "./style";
 import ItemCategoryProduct from '../Category/itemcategoryproduct';
-
 let API_SERVER = require("../../common/Api");
-
+import { useTheme } from 'react-native-paper';
+import {showTest} from '@hooks'
 
 const categoryProduct = [{
     id: 1,
@@ -139,9 +139,11 @@ const listProduct = [
 
 
 const Home = (props) => {
-
     const{navigation} = props
     const{route} = props
+    const{colors} = useTheme()
+    const {getText} = showTest()
+    getText({text:'1'})
 
     const toListProduct = async () => {
         navigation.navigate("ListProduct");
@@ -206,9 +208,11 @@ const Home = (props) => {
         navigation.navigate('CartScreen')
     )
 
+    console.log('colors.background '+colors.background)
+
     return (
         
-        <View style={styles.containner}>
+        <View style={[styles.containner,{backgroundColor:colors.background}]}>
             <View style={styles.search}>
                 <Image source={require('../../image/scan.png')} style={styles.ic_back} />
                 <TextInput placeholder="tim kiem nhanh " style={styles.borderSearch} />
@@ -245,8 +249,8 @@ const Home = (props) => {
                 <View style={styles.line}></View>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={styles.border1}>
-                        <Text style={styles.text1} >Siêu thị</Text>
-                        <Text style={styles.text2}>Gần đây</Text>
+                        <Text style={[styles.text1,{color:colors.text}]} >Siêu thị</Text>
+                        <Text style={[styles.text2,{color:colors.text}]}>Gần đây</Text>
                     </View>
                     <View style={styles.border1}>
                         <Text style={styles.text1} >Đơn hàng</Text>

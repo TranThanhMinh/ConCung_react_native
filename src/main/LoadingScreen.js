@@ -17,9 +17,6 @@ const LoadingScreen = ({navigation,route}) => {
 
     return (
         <View style={{ flex: 1,marginTop:50}}>
-            <TouchableOpacity onPress={handleLoading}>
-                <Text>test</Text>
-            </TouchableOpacity>
             <Image source={require('../image/background.png')} style={{ width: '100%', height: '100%' }} />
             <Progress.Bar progress={0.3} width={200} />
         </View>

@@ -1,9 +1,11 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { View, Image, Text, TouchableOpacity, TextInput, FlatList, ScrollView } from "react-native";
 import styles from "../DetailProduct/style";
 import Color from "../../common/Color";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { HistorySchema } from "../../data/History";
+import Realm from "realm";
 
 
 const listProduct = [
@@ -52,12 +54,63 @@ const listProduct = [
 
 ]
 
-
+let realm;
 
 const DetailProduct = (props) => {
     const { navigation } = props;
     const { route } = props;
     const { product } = route.params;
+
+    
+
+
+    // useEffect(() => {
+
+    //     //   let todos = realm.objects('Todos');
+    //     //   setData([...todos]);
+    //     getRealmInstance();
+    //     createData()
+    // }, []);
+
+    useEffect(() => {
+        const getRealmInstance = async () => {
+          try {
+           
+            realm = await Realm.open({
+              path: 'myrealm',
+              schema: [HistorySchema],
+            });
+          } catch (e) {
+            console.log(e);
+          }
+        };
+        //   let todos = realm.objects('History');
+        //   setData([...todos]);
+        getRealmInstance();
+        createData()
+      }, []);
+
+    const getRealmInstance = async () => {
+        try {
+            realm = await Realm.open({
+                path: 'myrealm',
+                schema: [HistorySchema],
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const createData = () => {
+        realm.write(() => {
+            realm.create('History', {
+                id: product.idProduct,
+                image: product.image,
+                name: product.nameProduct,
+            });
+
+        });
+    }
 
 
 
@@ -204,7 +257,7 @@ const DetailProduct = (props) => {
                     <Text style={styles.textAddCart}>Them vao giỏ</Text>
                 </View>
                 <View style={styles.buy}>
-                    <TouchableOpacity onPress={()=>addCart()}>
+                    <TouchableOpacity onPress={() => addCart()}>
                         <Text style={styles.textBuy}>Mua ngay</Text>
                     </TouchableOpacity>
                 </View>

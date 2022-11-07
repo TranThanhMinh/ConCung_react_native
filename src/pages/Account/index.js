@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import {
   View, Text, TouchableOpacity, Image, useWindowDimensions, FlatList, SafeAreaView, ScrollView, Dimensions,
   ImageBackground, Alert, Platform
@@ -20,10 +20,12 @@ import { GooglePay } from 'react-native-google-pay';
 import Dialog from "react-native-dialog";
 import i18n from "i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import {useColors,ThemeContext} from '@hooks'
+import { useTheme } from 'react-native-paper';
 
 const allowedCardNetworks = ['VISA', 'MASTERCARD'];
 const allowedCardAuthMethods = ['PAN_ONLY', 'CRYPTOGRAM_3DS'];
+
 
 const OPTIONS = {
   requestPayerName: true,
@@ -117,6 +119,7 @@ const DETAILS = {
 };
 const Account = (props) => {
   const { navigation } = props
+  const { theme, setTheme } = useColors({ themeName: 'Light' })
   const { route } = props
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
@@ -124,7 +127,12 @@ const Account = (props) => {
   const { t } = useTranslation()
 
   const [visible, setVisible] = useState(false);
+  const [visibleColor, setVisibleColor] = useState(false);
   const [index, setIndex] = React.useState(0);
+
+  const {colors} = useTheme()
+
+  const themeContext = useContext(ThemeContext)
   const [routes] = React.useState([
     { key: 'chogiao', title: 'Chờ giao', image: '../../image/wall-clock.png' },
     { key: 'danggiao', title: 'Đang giao', image: '../../image/gift.png' },
@@ -301,11 +309,19 @@ const Account = (props) => {
     return (
       <Dialog.Container visible={visible}>
         <Dialog.Title> Cài đặt ngôn ngữ</Dialog.Title>
-        {/* <Dialog.Description>
-        Cài đặt ngôn ngữ
-      </Dialog.Description> */}
         <Dialog.Button label="Việt Nam" onPress={handleCancel} />
         <Dialog.Button label="Tiếng Anh" onPress={handleDelete} />
+      </Dialog.Container>
+    )
+  }
+
+  function changeTheme() {
+    return (
+      <Dialog.Container visible={visibleColor}>
+        <Dialog.Title> {t('theme')}</Dialog.Title>
+
+        <Dialog.Button label={t('dark')} onPress={colorDark} />
+        <Dialog.Button label={t('light')} onPress={colorLight} />
       </Dialog.Container>
     )
   }
@@ -314,12 +330,38 @@ const Account = (props) => {
     setVisible(true);
   };
 
+  const showChangeColor = () => {
+    setVisibleColor(true);
+  };
+
   const handleCancel = () => {
     global.multilanguge = 'vi';
     saveLanguge(global.multilanguge)
-    i18n.changeLanguage(global.multilanguge)
+    themeContext.toggleLanguge()
     setVisible(false);
   };
+
+  const colorDark = () => {
+    saveColor('Dark')
+    
+  }
+  
+
+  const colorLight = () => {
+    saveColor('Light')
+   
+  }
+
+  const saveColor = (color) => {
+    try {
+      AsyncStorage.setItem("color", color);
+      setTheme(color)
+      themeContext.toggleTheme()
+    } catch (error) {
+      console.log("color error 2")
+    }
+    setVisibleColor(false)
+  }
 
   const saveLanguge = (language) => {
     try {
@@ -333,15 +375,19 @@ const Account = (props) => {
     // The user has pressed the "Delete" button, so here you can do your own logic.
     // ...Your logic
     global.multilanguge = 'en';
-    i18n.changeLanguage(global.multilanguge)
+   // i18n.changeLanguage(global.multilanguge)
     saveLanguge(global.multilanguge)
+    themeContext.toggleLanguge()
     setVisible(false);
+
+   
   };
 
   return (
     <ScrollView>
-      <View style={styles.containner}>
+      <View style={[styles.containner,{backgroundColor:colors.background}]}>
         {changeLanguge()}
+        {changeTheme()}
         <Image source={{ uri: 'https://concung.com/themes/mobile4.1/image/customer-new.png' }} style={{ width: '100%', height: 250, resizeMode: 'stretch', }} />
         <View style={styles.information}>
           <Image source={require('../../image/qr-code.png')} style={{ width: 40, height: 40 }} />
@@ -368,51 +414,57 @@ const Account = (props) => {
           <View style={styles.line2} />
           <View style={styles.row}>
             <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
-            <Text style={styles.text}>Mã quà tặng</Text>
+            <Text style={styles.text}>{t('account.gift')}</Text>
           </View>
           <View style={styles.line2} />
           <View style={styles.row}>
             <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
-            <Text style={styles.text}>Địa chỉ nhận hàng</Text>
+            <Text style={styles.text}>{t('account.address')}</Text>
           </View>
           <View style={styles.line2} />
           <View style={styles.row}>
             <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
-            <Text style={styles.text}>Thẻ thành viển </Text>
+            <Text style={styles.text}>{t('account.member')}</Text>
           </View>
           <View style={styles.line2} />
           <View style={styles.row}>
             <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
-            <Text style={styles.text}>Ưu đãi VIP</Text>
+            <Text style={styles.text}>{t('account.offers')}</Text>
           </View>
           <View style={styles.line2} />
           <View style={styles.row}>
             <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
-            <Text style={styles.text}>Thông tin bảo hành</Text>
-          </View>
-          <View style={styles.line2} />
-
-          <View style={styles.row}>
-            <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
-            <Text style={styles.text}>Sản phẩm đã xem</Text>
+            <Text style={styles.text}>{t('account.information')}</Text>
           </View>
           <View style={styles.line2} />
 
           <View style={styles.row}>
             <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
-            <Text style={styles.text}>Bình luận của tôi</Text>
+            <Text style={styles.text}>{t('viewed.product')}</Text>
+          </View>
+          <View style={styles.line2} />
+
+          <View style={styles.row}>
+            <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
+            <Text style={styles.text}>{t('mycomment')}</Text>
           </View>
 
           <View style={styles.line2} />
           <TouchableOpacity style={styles.row} onPress={() => Platform.OS == 'ios' ? showPaymentSheet() : showPaymentSheet2()} >
             <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
-            <Text style={styles.text}>Thanh toán</Text>
+            <Text style={styles.text}>{t('payment')}</Text>
           </TouchableOpacity>
 
           <View style={styles.line2} />
           <TouchableOpacity style={styles.row} onPress={() => showChangeLanguge()} >
             <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
-            <Text style={styles.text}>Ngôn ngu</Text>
+            <Text style={styles.text}>{t('language')}</Text>
+          </TouchableOpacity>
+
+          <View style={styles.line2} />
+          <TouchableOpacity style={styles.row} onPress={() => showChangeColor()} >
+            <Image source={require('../../image/addCart.png')} style={styles.sizeIcon} />
+            <Text style={styles.text}>{t('theme')}</Text>
           </TouchableOpacity>
 
           {/* <ApplePayButton
@@ -427,7 +479,7 @@ const Account = (props) => {
           <View>
             <TouchableOpacity onPress={handleLogOut} style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center" }}>
               <Image source={require('../../image/logout.png')} style={{ width: 20, height: 20, marginHorizontal: 5 }} />
-              <Text>Đăng xuất</Text>
+              <Text>{t('account.logout')}</Text>
             </TouchableOpacity>
           </View>
 

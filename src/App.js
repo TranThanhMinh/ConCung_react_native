@@ -7,9 +7,11 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Image, View, Text } from 'react-native'
+import { Image, View, Text, useColorScheme } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer
+} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './main/HomeScreen';
 import PromotionScreen from './main/PromotionScreen';
@@ -23,11 +25,11 @@ import DetailProduct from './main/DetailProductScreen'
 import CartScreen from './main/CartScreen';
 import { Store } from './redux/reducer';
 import { Provider } from 'react-redux';
-
+import { Provider as PaperProvider } from 'react-native-paper';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Constants from './common/Constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { useColors, ThemeContext } from '@hooks'
 import './common/i18n'
 
 import i18n from "i18next";
@@ -39,11 +41,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+
 const MyTabs = (props) => {
   const { t } = useTranslation();
   const [multilanguge, setMultilanguge] = useState('en')
-
-  console.disableYellowBox = true;
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -80,11 +81,11 @@ const MyTabs = (props) => {
   );
 }
 const App = () => {
+  const { theme, setTheme, themeName } = useColors({ themeName: 'Light' })
   const getLanguge = async () => {
     const language = await AsyncStorage.getItem("language");
     try {
-      console.log('minh test 2r ' + language);
-      global.multilanguge = language
+      console.log('language '+ language)
       i18n.changeLanguage(language)
     }
     catch (error) {
@@ -93,24 +94,55 @@ const App = () => {
     }
   }
 
+  const toggleLanguge = async () => {
+    getLanguge()
+  }
+
+  const getTheme = async () => {
+    const theme1 = await AsyncStorage.getItem("color");
+    try {
+      if (!theme1) {
+        theme1 = 'Dark'
+      } else {
+        setTheme(theme1)
+      }
+    }
+    catch (error) {
+      console.log(error);
+
+    }
+  }
+
+
+  const toggleTheme = async () => {
+    const theme = await AsyncStorage.getItem("color");
+    setTheme(theme)
+  }
+
   useEffect(() => {
     getLanguge()
+    getTheme()
   }, [])
 
 
 
   return (
-    <Provider store={Store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Loading" component={LoadingScreen} options={{ title: "Tabs" }} />
-          <Stack.Screen name="MyTabs" component={MyTabs} options={{ title: "MyTabs" }} />
-          <Stack.Screen name="ListProduct" component={ListProduct} options={{ title: "ListProduct" }} />
-          <Stack.Screen name="DetailProduct" component={DetailProduct} options={{ title: "DetailProduct" }} />
-          <Stack.Screen name="CartScreen" component={CartScreen} options={{ title: "CartScreen" }} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <ThemeContext.Provider value={{ theme: themeName, toggleTheme, toggleLanguge }}>
+      <PaperProvider theme={theme} >
+        <Provider store={Store}>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Loading" component={LoadingScreen} options={{ title: "Tabs" }} />
+              <Stack.Screen name="MyTabs" component={MyTabs} options={{ title: "MyTabs" }} />
+              <Stack.Screen name="ListProduct" component={ListProduct} options={{ title: "ListProduct" }} />
+              <Stack.Screen name="DetailProduct" component={DetailProduct} options={{ title: "DetailProduct" }} />
+              <Stack.Screen name="CartScreen" component={CartScreen} options={{ title: "CartScreen" }} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </Provider>
+      </PaperProvider>
+    </ThemeContext.Provider>
   );
+
 }
 export default App;

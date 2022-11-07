@@ -17,6 +17,19 @@ i18n
           'promotion': 'Promotion',
           'shops': 'Shop Recently',
           'account': 'Account',
+          'theme':'Theme',
+          'language':'Languages',
+          'mycomment':'My comment',
+          'payment':'Payment',
+          'viewed.product':'Viewed products',
+          'account.offers':'VIP offers',
+          'account.information':'Warranty information',
+          'account.member':'Membership card',
+          'account.address':'Delivery address',
+          'account.gift':'Gift Codes',
+          'account.logout':'Logout',
+          'dark':'Dark',
+          'light':'Light'
         }
       },
       vi: {
@@ -28,6 +41,19 @@ i18n
           'promotion': 'Khuyến mãi',
           'shops': 'Shop gần đây',
           'account': 'Tài khoản',
+          'theme':'Chế độ sáng tối',
+          'language':'Ngôn ngữ',
+          'mycomment':'Bình luận của tôi',
+          'payment':'Thanh toán',
+          'viewed.product':'Sản phẩm đã xem',
+          'account.offers':'Ưu đãi VIP',
+          'account.information':'Thông tin bảo hành',
+          'account.member':'Thẻ thành viên',
+          'account.address':'Địa chỉ nhận hàng',
+          'account.gift':'Mã quà tặng',
+          'account.logout':'Đăng xuất',
+          'dark':'Tối',
+          'light':'Sáng'
         }
       }
     },

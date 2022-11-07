@@ -6,10 +6,8 @@ console.log('numColumns2 ' + width)
 
 export default style = StyleSheet.create({
   containner: {
-    
     paddingTop:  Platform.OS === 'ios' ? 50 : 10,
     flex: 1,
-    backgroundColor: Color.white
   },
   search: {
     flexDirection: 'row',
