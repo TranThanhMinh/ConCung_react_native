@@ -61,10 +61,10 @@ const categoryProduct = [{
 }];
 
 const initialList = [
-   
-  ];
-  
-  
+
+];
+
+
 
 
 // { navigation, route }
@@ -89,15 +89,18 @@ const Urgent = (props) => {
         })
             .then((image) => {
                 console.log('received image', image);
-                this.setState({
-                    image: {
-                        uri: image.path,
-                        width: image.width,
-                        height: image.height,
-                        mime: image.mime,
-                    },
-                    images: null,
-                });
+                const i = image.path
+                const newList = list.concat({ i });
+                setList(newList);
+                // this.setState({
+                //     image: {
+                //         uri: image.path,
+                //         width: image.width,
+                //         height: image.height,
+                //         mime: image.mime,
+                //     },
+                //     images: null,
+                // });
             })
             .catch((e) => alert(e));
     }
@@ -106,7 +109,7 @@ const Urgent = (props) => {
         ImagePicker.openPicker({
             width: 300,
             height: 300,
-            cropping: true,
+            cropping: cropit,
             includeBase64: true,
             includeExif: true,
         })
@@ -114,7 +117,6 @@ const Urgent = (props) => {
                 // console.log('received base64 image', image);
                 const i = image.path
                 const newList = list.concat({ i });
-
                 setList(newList);
                 // setImage(image.path)
                 // handleAdd()
@@ -130,11 +132,8 @@ const Urgent = (props) => {
             .catch((e) => alert(e));
     }
 
-
-
-    function handleAdd() {
-        const newList = list.concat({ image });
-
+    const handleDelete = (image) => {
+        const newList = list.filter(item => item.i != image);
         setList(newList);
     }
 
@@ -142,11 +141,13 @@ const Urgent = (props) => {
         console.log('Image ', item)
         return (
             <View style={styles.borderCategoryProduct}>
-            <Image source={{
-                uri: item.i,
-            }} style={styles.ic_category_product} />
-          
-        </View>
+                <Image source={{
+                    uri: item.i,
+                }} style={styles.ic_category_product} />
+                <TouchableOpacity onPress={() => handleDelete(item.i)} style={{ position: 'absolute', top: 0, right: 0 }}>
+                    <Image source={require('../../image/remove.png')} />
+                </TouchableOpacity>
+            </View>
         )
 
 
@@ -164,12 +165,13 @@ const Urgent = (props) => {
 
 
             <FlatList
+                style={{ marginTop: 10 }}
                 data={list}
                 horizontal={true}
                 renderItem={ItemRender}
             />
 
-           
+
         </View>
     )
 }

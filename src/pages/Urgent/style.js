@@ -6,14 +6,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: color.white,
         paddingHorizontal:20,
+        paddingTop:50
     },
     borderCategoryProduct:{
-
         padding:5
       },
       ic_category_product:{
         width: 100,
-        height: 100
+        height: 100,
+        borderRadius:10
       },
     titleLogin:{
        fontSize: 19,
