@@ -298,8 +298,9 @@ const Account = (props) => {
 
 
   const handleLogOut = async () => {
-    await AsyncStorage.setItem("user", "");
     Utils.isLogin = false;
+    console.log('logout '+Utils.isLogin)
+    await AsyncStorage.setItem("user", "");
     navigation.navigate('Home')
   }
 

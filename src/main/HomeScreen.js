@@ -11,7 +11,7 @@ const HomeScreen = ({ navigation, route }) => {
         Utils.username = login.user
         console.log(login.user);
         try {
-            if (user.length > 0)
+            if (login.user != '')
                 Utils.isLogin = true
             else Utils.isLogin = false;
 

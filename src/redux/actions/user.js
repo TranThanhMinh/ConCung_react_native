@@ -9,8 +9,12 @@ export const loginAccount = params => {
         dispatch({ type: ActionTypes.LOGIN_PENĐING })
         Service.postApi(login, params)
             .then(data => {
-                if (data.result == 'success')
+                if (data.result == 'success'){
+                    let user = data.data
+                    global.accessToken = user.accessToken
+                    console.log('global.accessToken '+JSON.stringify( global.accessToken.accessToken))
                     dispatch({ type: ActionTypes.LOGIN_SUCCESS, data })
+                }
                 else {
                     dispatch({ type: ActionTypes.LOGIN_FAIL, message: data.message, })
                 }

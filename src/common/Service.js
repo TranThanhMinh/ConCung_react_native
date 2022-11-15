@@ -26,6 +26,25 @@ class Service {
                     }
                 })
                 .then(res => {
+                    {    
+                        resolve(res.data);
+                    }
+                }).catch(error => error)
+        });
+    }
+
+
+    static post(uri, params) {
+        return new Promise(function (resolve, reject) {
+            axios.post(uri, params,
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':global.accessToken
+                    }
+                })
+                .then(res => {
                     { 
                         resolve(res.data);
                     }
@@ -34,5 +53,6 @@ class Service {
     }
 
 }
+
 
 export default Service

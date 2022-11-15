@@ -16,7 +16,8 @@ const ShopRecentlyScreen =({navigation,route})=>{
       }
     return(
      
-          <ShopRecently navigation={navigation} route = {route} /> 
+          <ShopRecently navigation={navigation} route = {route} 
+          goToUrgent={()=>{navigation.navigate('UrgentScreen')}}/> 
    
     )
 

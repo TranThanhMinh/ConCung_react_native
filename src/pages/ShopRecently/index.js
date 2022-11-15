@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Dialog from "react-native-dialog";
 import i18n from "i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,7 +15,8 @@ import {
   View,
   Image,
   Platform,
-  TextInput
+  TextInput,
+  TouchableOpacity
 } from 'react-native';
 import Geocoder from 'react-native-geocoding';
 import MapView, { PROVIDER_GOOGLE, PROVIDER_DEFAULT, Marker, Callout, Polyline } from 'react-native-maps';
@@ -29,7 +30,7 @@ const LONGITUDE = 108.47184857418542;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const ShopRecently = () => {
+const ShopRecently = (props) => {
   const [visible, setVisible] = useState(false);
 
   const showDialog = () => {
@@ -87,7 +88,7 @@ const ShopRecently = () => {
   }, []);
 
   // Geocoder.init("AIzaSyAVVG0HS2LsnOs1oX5JxOyZDkoUEao5tqc"); // use a valid API key
-  // // Search by address
+  // // // Search by address
   // Geocoder.from("tổ 1, an trân , bình hải,thăng bình,quảng nam")
   //   .then(json => {
   //     var location = json.results[0].geometry.location;
@@ -150,61 +151,53 @@ const ShopRecently = () => {
   }
 
   return (
-    // <View style={styles.container}>
-    //   {/* <Button title="Show dialog" onPress={showDialog} />
-    //   {changeLanguge()} */}
-
-    //   <MapView
-    //     initialRegion={{
-    //       latitude: 37.78825,
-    //       longitude: -122.4324,
-    //       latitudeDelta: 0.0922,
-    //       longitudeDelta: 0.0421,
-    //     }}
-    //   />
-    // </View>
     <View style={styles.containner}>
+      <TouchableOpacity onPress={() => props.goToUrgent()}>
+        <Text>Gửi khân cấp</Text>
+      </TouchableOpacity>
   
-      
-        <MapView
-          provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
-          style={styles.map}
-          region={{
+      <View style={{flex:1}}>
+      <MapView
+     //  provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        region={{
+          latitude: 15.706938,
+          longitude: 108.471806,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}>
+        <Marker coordinate={coordinates[0]} />
+        <Marker coordinate={coordinates[1]} />
+        <Marker coordinate={coordinates[2]} />
+
+        <Marker coordinate={position} />
+        <Polyline
+          coordinates={coordinates}
+          strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeColors={['#7F0000']}
+          strokeWidth={6}
+        />
+        <Marker
+          coordinate={{
             latitude: 15.706938,
             longitude: 108.471806,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}>
-          <Marker coordinate={coordinates[0]} />
-          <Marker coordinate={coordinates[1]} />
-          <Marker coordinate={coordinates[2]} />
+          }}
+          image={require('../../image/location-pin.png')}
+          title={'shop 1'}
+          description={'ban nhiều thứ'}>
+          <Callout tooltips>
+            <View>
+              <Text>Nhà tôi ở đây</Text>
+              <Image source={require('../../image/scan.png')} />
+            </View>
+          </Callout>
+        </Marker>
 
-          <Marker coordinate={position} />
-          <Polyline
-            coordinates={coordinates}
-            strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-            strokeColors={['#7F0000']}
-            strokeWidth={6}
-          />
-          <Marker
-            coordinate={{
-              latitude: 15.706938,
-              longitude: 108.471806,
-            }}
-            image={require('../../image/location-pin.png')}
-            title={'shop 1'}
-            description={'ban nhiều thứ'}>
-            <Callout tooltips>
-              <View>
-                <Text>Nhà tôi ở đây</Text>
-                <Image source={require('../../image/scan.png')} />
-              </View>
-            </Callout>
-          </Marker>
+      </MapView>
+      </View>
 
-        </MapView>
 
-   
+
     </View>
   );
 }

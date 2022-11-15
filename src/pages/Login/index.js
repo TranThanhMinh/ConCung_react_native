@@ -35,6 +35,8 @@ const Login = (props) => {
                         user: user,
                         pass: pass
                     }));
+
+                    console.log(JSON.stringify('accessToken: '+global.accessToken))
                 } catch (error) {
 
                 }

@@ -23,6 +23,7 @@ import ShopRecentlyScreen from './main/ShopRecentlyScreen';
 import Strings from './common/Strings';
 import DetailProduct from './main/DetailProductScreen'
 import CartScreen from './main/CartScreen';
+import UrgentScreen from './main/UrgentScreen';
 import { Store } from './redux/reducer';
 import { Provider } from 'react-redux';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -85,12 +86,15 @@ const App = () => {
   const getLanguge = async () => {
     const language = await AsyncStorage.getItem("language");
     try {
-      console.log('language '+ language)
+      if(language === null)
+      i18n.changeLanguage('vi')
+      else
       i18n.changeLanguage(language)
     }
     catch (error) {
       console.log(error);
-
+      language = 'vi'
+      i18n.changeLanguage(language)
     }
   }
 
@@ -137,6 +141,7 @@ const App = () => {
               <Stack.Screen name="ListProduct" component={ListProduct} options={{ title: "ListProduct" }} />
               <Stack.Screen name="DetailProduct" component={DetailProduct} options={{ title: "DetailProduct" }} />
               <Stack.Screen name="CartScreen" component={CartScreen} options={{ title: "CartScreen" }} />
+              <Stack.Screen name="UrgentScreen" component={UrgentScreen} options={{ title: "UrgentScreen" }} />
             </Stack.Navigator>
           </NavigationContainer>
         </Provider>
