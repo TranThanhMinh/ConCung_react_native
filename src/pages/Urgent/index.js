@@ -1,83 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Alert, TextInput, Image, ImageBackground, FlatList } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Image, ImageBackground, FlatList } from "react-native";
 import styles from "./style";
-import { useSelector, useDispatch } from "react-redux";
-import { State } from "react-native-gesture-handler";
-import { loginAccount } from '../../redux/actions/user';
-import * as ActionTypes from '@actions/ActionTypes'
-import Toast from 'react-native-toast-message';
-import Loading from '../../component/Loading';
-import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
+
 import ImagePicker from 'react-native-image-crop-picker';
-import { UserState } from "realm";
-import ItemCategoryProduct from '../Category/itemcategoryproduct';
-
-const categoryProduct = [{
-    id: 1,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Sữa bột cao cấp"
-},
-{
-    id: 2,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Bĩm sửa khuyến mãi"
-}, {
-    id: 3,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Sữa tươi các loại"
-}, {
-    id: 4,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Sữa bột cao cấp"
-}, {
-    id: 5,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Sữa bột cao cấp"
-}, {
-    id: 6,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Sữa bột cao cấp"
-}, {
-    id: 7,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Sữa bột cao cấp"
-}, {
-    id: 8,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Sữa bột cao cấp"
-}, {
-    id: 9,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Sữa bột cao cấp"
-}, {
-    id: 10,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Sữa bột cao cấp"
-}, {
-    id: 11,
-    image: "https://concung.com/img/res/menu-mobile/10-iconsuabotcongthuc@500-1634918291.png",
-    name: "Sữa bột cao cấp"
-}];
-
-const initialList = [
-
-];
-
-
-
+import Dialog from "react-native-dialog";
 
 // { navigation, route }
 const Urgent = (props) => {
 
     const [image, setImage] = useState('')
 
-    const [list, setList] = React.useState(initialList);
+    const [visible, setVisible] = useState(false)
 
-    const itemcategoryproduct = ({ item }) => (
-        <ItemCategoryProduct image={item.image} name={item.name} />
-    )
-
+    const [list, setList] = React.useState([]);
 
     function pickSingleWithCamera(cropping, mediaType = 'photo') {
         ImagePicker.openCamera({
@@ -92,6 +27,7 @@ const Urgent = (props) => {
                 const i = image.path
                 const newList = list.concat({ i });
                 setList(newList);
+                handleHidden()
                 // this.setState({
                 //     image: {
                 //         uri: image.path,
@@ -118,6 +54,7 @@ const Urgent = (props) => {
                 const i = image.path
                 const newList = list.concat({ i });
                 setList(newList);
+                handleHidden()
                 // setImage(image.path)
                 // handleAdd()
                 // this.setState({
@@ -138,7 +75,7 @@ const Urgent = (props) => {
     }
 
     const ItemRender = ({ item }) => {
-        console.log('Image ', item)
+
         return (
             <View style={styles.borderCategoryProduct}>
                 <Image source={{
@@ -149,29 +86,64 @@ const Urgent = (props) => {
                 </TouchableOpacity>
             </View>
         )
+    }
+
+    const handleShow = () => (
+        setVisible(true)
+    )
+
+    const handleHidden = () => (
+        setVisible(false)
+    )
 
 
+
+    const dialogImage = () => {
+        return (
+            <View style={styles.container}>
+                <Dialog.Container visible={visible}>
+                    <Dialog.Title>Image</Dialog.Title>
+                    {/* <Dialog.Button label="Camera"  onPress={()=>pickSingleWithCamera(true)}/>
+                <Dialog.Button label="Select from library"  onPress={()=>pickSingleBase64(false)}/> */}
+                    <TouchableOpacity onPress={() => pickSingleWithCamera(true)} style={styles.borderLogin}>
+                        <Text style={styles.text}>Camera</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => pickSingleBase64(false)} style={styles.borderLogin}>
+                        <Text style={styles.text}>Select image</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => handleHidden()} style={styles.borderLogin}>
+                        <Text style={styles.text}>Cancel</Text>
+                    </TouchableOpacity>
+                </Dialog.Container>
+            </View>
+        );
     }
 
     return (
         <View style={styles.contrainer}>
-            <TouchableOpacity onPress={() => pickSingleWithCamera(true)} style={styles.borderLogin}>
+            <TouchableOpacity onPress={() => props.goToBack()}>
+                <Text style={{ color: 'red' }}>{'< '}Quay lại</Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={() => pickSingleWithCamera(true)} style={styles.borderLogin}>
                 <Text style={styles.text}>Camera</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => pickSingleBase64(false)} style={styles.borderLogin}>
                 <Text style={styles.text}>Select image</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
+            <TouchableOpacity onPress={() => handleShow()} style={styles.borderLogin}>
+                <Text style={styles.text}>Add image</Text>
+            </TouchableOpacity>
 
             <FlatList
                 style={{ marginTop: 10 }}
                 data={list}
                 horizontal={true}
-                renderItem={ItemRender}
-            />
-
-
+                renderItem={ItemRender} />
+            {dialogImage()}
         </View>
     )
 }

@@ -8,6 +8,12 @@ const styles = StyleSheet.create({
         paddingHorizontal:20,
         paddingTop:50
     },
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+      },
     borderCategoryProduct:{
         padding:5
       },
